@@ -1,0 +1,2230 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "OpenAsy Automation API",
+    "version": "0.1.0",
+    "summary": "Playbooks that act through the products when one of them sees something, with approvals before risky steps.",
+    "description": "Every screen of automation uses this API, and so can your scripts (ADR 0014). Within `/api/v1` changes are additive only; anything removed is deprecated first (ADR 0024). Errors use Problem Details (RFC 9457).\n\nEvents start playbooks at `/hooks/<playbook>`, with the playbook's own token. Everything else takes the session of a signed-in person or an API token, and each operation names the role it needs (`x-openasy-role`: viewer, editor, admin; ADR 0003).\n\nSign-in, members and API tokens are under `/api/v1/auth`, provided by [@openasy/auth](https://github.com/openasy/auth#routes).",
+    "license": {
+      "name": "AGPL-3.0-only",
+      "identifier": "AGPL-3.0-only"
+    }
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "This automation"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Playbooks",
+      "description": "What starts them, their conditions and steps."
+    },
+    {
+      "name": "Runs",
+      "description": "Each run, step by step, and approvals."
+    },
+    {
+      "name": "Connections",
+      "description": "The products and webhooks steps may call."
+    },
+    {
+      "name": "Triggers",
+      "description": "Events from products and tools."
+    },
+    {
+      "name": "Product",
+      "description": "Version and overview of this automation."
+    }
+  ],
+  "paths": {
+    "/api/v1/connections": {
+      "get": {
+        "operationId": "listConnections",
+        "tags": [
+          "Connections"
+        ],
+        "summary": "Connections",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "viewer",
+        "description": "Needs the viewer role. Steps call these addresses and no others.",
+        "responses": {
+          "200": {
+            "description": "The connections.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createConnection",
+        "tags": [
+          "Connections"
+        ],
+        "summary": "Add a connection",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "admin",
+        "description": "Needs the admin role, as it holds another product's token or a webhook's key.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewConnection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The connection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/connections/{id}": {
+      "patch": {
+        "operationId": "updateConnection",
+        "tags": [
+          "Connections"
+        ],
+        "summary": "Change a connection",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "admin",
+        "description": "Needs the admin role. A new token replaces the old one.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The connection's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConnection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The connection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteConnection",
+        "tags": [
+          "Connections"
+        ],
+        "summary": "Delete a connection",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "admin",
+        "description": "Needs the admin role. Refused while a playbook uses it.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The connection's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/connections/{id}/test": {
+      "post": {
+        "operationId": "testConnection",
+        "tags": [
+          "Connections"
+        ],
+        "summary": "Test a connection",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "editor",
+        "description": "Needs the editor role. Calls GET /api/v1/products of the product with the token, which changes nothing. Slack, Teams and webhooks are not called.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The connection's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "How the call went.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionTest"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/playbooks": {
+      "get": {
+        "operationId": "listPlaybooks",
+        "tags": [
+          "Playbooks"
+        ],
+        "summary": "Playbooks",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "viewer",
+        "description": "Needs the viewer role.",
+        "responses": {
+          "200": {
+            "description": "The playbooks.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaybookList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createPlaybook",
+        "tags": [
+          "Playbooks"
+        ],
+        "summary": "Add a playbook",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "editor",
+        "description": "Needs the editor role. Every step is checked against the connections, and may only read steps before it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaybookDefinition"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The playbook, and its webhook token once.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedPlaybook"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/playbooks/{id}": {
+      "get": {
+        "operationId": "getPlaybook",
+        "tags": [
+          "Playbooks"
+        ],
+        "summary": "A playbook",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "viewer",
+        "description": "Needs the viewer role.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The playbook's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The playbook.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playbook"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      },
+      "put": {
+        "operationId": "updatePlaybook",
+        "tags": [
+          "Playbooks"
+        ],
+        "summary": "Change a playbook",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "editor",
+        "description": "Needs the editor role. Replaces the whole definition; runs already started keep theirs.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The playbook's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaybookDefinition"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The playbook.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedPlaybook"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deletePlaybook",
+        "tags": [
+          "Playbooks"
+        ],
+        "summary": "Delete a playbook",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "admin",
+        "description": "Needs the admin role. Its runs are deleted with it.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The playbook's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/playbooks/{id}/token": {
+      "post": {
+        "operationId": "rotateWebhookToken",
+        "tags": [
+          "Playbooks"
+        ],
+        "summary": "A new webhook token",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "editor",
+        "description": "Needs the editor role. The old token stops working.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The playbook's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The token, shown once.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookToken"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/playbooks/{id}/run": {
+      "post": {
+        "operationId": "runPlaybook",
+        "tags": [
+          "Playbooks"
+        ],
+        "summary": "Run a playbook now",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "editor",
+        "description": "Needs the editor role. Starts it on the event given; a dry run sends nothing and records what would be sent. The run goes on after the answer.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The playbook's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunNow"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "The run, as it starts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/runs": {
+      "get": {
+        "operationId": "listRuns",
+        "tags": [
+          "Runs"
+        ],
+        "summary": "Runs",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "viewer",
+        "description": "Needs the viewer role. Newest first.",
+        "parameters": [
+          {
+            "name": "playbook",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "running",
+                "waiting",
+                "succeeded",
+                "failed",
+                "refused"
+              ]
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500,
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of runs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{id}": {
+      "get": {
+        "operationId": "getRun",
+        "tags": [
+          "Runs"
+        ],
+        "summary": "A run, step by step",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "viewer",
+        "description": "Needs the viewer role.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The run's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{id}/decision": {
+      "post": {
+        "operationId": "decideApproval",
+        "tags": [
+          "Runs"
+        ],
+        "summary": "Approve or refuse the waiting step",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "editor",
+        "description": "Needs the editor role. Approved, the run goes on; refused, it stops and the rest is skipped.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The run's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/approvals": {
+      "get": {
+        "operationId": "listApprovals",
+        "tags": [
+          "Runs"
+        ],
+        "summary": "Runs waiting for a person",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "viewer",
+        "description": "Needs the viewer role. Oldest first.",
+        "responses": {
+          "200": {
+            "description": "The runs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/hooks/{id}": {
+      "post": {
+        "operationId": "sendEvent",
+        "tags": [
+          "Triggers"
+        ],
+        "summary": "Send an event to a playbook",
+        "security": [
+          {
+            "webhookToken": []
+          }
+        ],
+        "description": "Starts a playbook whose trigger is a webhook, when its conditions hold on the event. The body is the event, any JSON object up to 256 KiB.\n\n```bash\ncurl -sf -X POST -H \"Authorization: Bearer $TOKEN\" -H 'content-type: application/json' \\\n  -d '{\"signal\":{\"rule\":\"impossible-travel\",\"person\":\"p_ada\"}}' https://automation.example.com/hooks/pb_…\n```",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The playbook's id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The conditions do not hold: no run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HookResult"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "A run started.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HookResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "413": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/summary": {
+      "get": {
+        "operationId": "getSummary",
+        "tags": [
+          "Product"
+        ],
+        "summary": "Overview",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "x-openasy-role": "viewer",
+        "description": "Needs the viewer role.",
+        "responses": {
+          "200": {
+            "description": "Playbooks and runs of the last 30 days.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Summary"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/version": {
+      "get": {
+        "operationId": "getVersion",
+        "tags": [
+          "Product"
+        ],
+        "summary": "Version",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "The running version.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Version"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "operationId": "listProducts",
+        "tags": [
+          "Product"
+        ],
+        "summary": "Other products of this install",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiToken": []
+          },
+          {
+            "adminToken": []
+          }
+        ],
+        "description": "Needs the viewer role.",
+        "responses": {
+          "200": {
+            "description": "From OPENASY_PRODUCTS, for the product switcher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "x-openasy-role": "viewer"
+      }
+    },
+    "/healthz": {
+      "get": {
+        "operationId": "liveness",
+        "tags": [
+          "Product"
+        ],
+        "summary": "Liveness",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "The process is running.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readyz": {
+      "get": {
+        "operationId": "readiness",
+        "tags": [
+          "Product"
+        ],
+        "summary": "Readiness",
+        "description": "Ready while the database answers.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Ready to serve.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The database is unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "operationId": "metrics",
+        "tags": [
+          "Product"
+        ],
+        "summary": "Prometheus metrics",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Metrics in the Prometheus text format.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "session": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-openasy-session",
+        "description": "The browser session after signing in (`openasy-session` when automation runs on plain http://localhost). Requests that change something must come from the automation origin."
+      },
+      "apiToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "An API token created under Settings → API tokens (`oa_automation_...`): one role, always an expiry (ADR 0003)."
+      },
+      "adminToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Only when automation is started by its tests or a local script: one shared token with the admin role. A production install does not have it."
+      },
+      "webhookToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "A playbook's own token (`oah_…`), shown when its webhook trigger is made. It starts that playbook and nothing else."
+      }
+    },
+    "responses": {
+      "Problem": {
+        "description": "An error, as RFC 9457 Problem Details.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Problem": {
+        "type": "object",
+        "required": [
+          "type",
+          "title",
+          "status",
+          "code"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "invalid-token",
+              "invalid-json",
+              "invalid-body",
+              "conflict",
+              "not-found",
+              "not-configured",
+              "payload-too-large",
+              "internal-error",
+              "unauthenticated",
+              "invalid-credentials",
+              "mfa-required",
+              "mfa-setup-required",
+              "forbidden",
+              "cross-site",
+              "rate-limited"
+            ],
+            "description": "Stable; match on this."
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      },
+      "ProductLink": {
+        "type": "object",
+        "required": [
+          "id",
+          "url"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The product, as OpenAsy names it.",
+            "examples": [
+              "infrastructure"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The address people open it at.",
+            "examples": [
+              "https://infra.example.com"
+            ]
+          }
+        }
+      },
+      "ProductList": {
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductLink"
+            }
+          }
+        }
+      },
+      "Status": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Version": {
+        "type": "object",
+        "required": [
+          "product",
+          "version"
+        ],
+        "properties": {
+          "product": {
+            "const": "automation"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "Connection": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "product",
+          "address",
+          "hasToken",
+          "playbooks",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "openasy",
+              "slack",
+              "teams",
+              "webhook"
+            ]
+          },
+          "product": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "For an OpenAsy connection, the product's id, such as incidents."
+          },
+          "address": {
+            "type": "string",
+            "description": "A product's address; of Slack, Teams and webhooks only the host, as the rest of the URL is a key."
+          },
+          "hasToken": {
+            "type": "boolean"
+          },
+          "playbooks": {
+            "type": "integer",
+            "description": "Playbooks with a step that uses it."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ConnectionList": {
+        "type": "object",
+        "required": [
+          "connections"
+        ],
+        "properties": {
+          "connections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Connection"
+            }
+          }
+        }
+      },
+      "NewConnection": {
+        "type": "object",
+        "required": [
+          "name",
+          "kind",
+          "url"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "openasy",
+              "slack",
+              "teams",
+              "webhook"
+            ]
+          },
+          "product": {
+            "type": "string",
+            "description": "For openasy: the product's id. Built-in steps need incidents or vpn; http steps take any."
+          },
+          "url": {
+            "type": "string",
+            "description": "A product's address, or the webhook URL Slack, Teams or a tool gave. https, except on this machine."
+          },
+          "token": {
+            "type": "string",
+            "description": "For openasy: an API token of that product, with the role the steps need. Kept sealed, never shown again."
+          }
+        }
+      },
+      "UpdateConnection": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "url": {
+            "type": "string"
+          },
+          "product": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "ConnectionTest": {
+        "type": "object",
+        "required": [
+          "ok",
+          "status",
+          "detail"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      },
+      "Trigger": {
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "webhook",
+              "schedule",
+              "manual"
+            ]
+          },
+          "everyMinutes": {
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 10080,
+            "description": "For schedule."
+          }
+        }
+      },
+      "Condition": {
+        "type": "object",
+        "required": [
+          "field",
+          "op"
+        ],
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "A path in the event, such as signal.severity."
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "equals",
+              "not-equals",
+              "contains",
+              "matches",
+              "exists",
+              "at-least"
+            ]
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Step": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "description": "One step. Text fields are templates: {{event.…}}, {{steps.<id>.…}} for the answer of an earlier step, {{run.id}}, {{playbook.name}}. incident.open needs title (severity, summary); incident.note incident and text; vpn.suspend person; vpn.disconnect server and device; vpn.revoke-device device; message text; http method, path and an optional JSON body; approval text.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,39}$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "incident.open",
+              "incident.note",
+              "vpn.suspend",
+              "vpn.disconnect",
+              "vpn.revoke-device",
+              "message",
+              "http",
+              "approval"
+            ]
+          },
+          "connection": {
+            "type": "string",
+            "description": "A connection's id; approval takes none."
+          },
+          "continueOnError": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "incident": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "person": {
+            "type": "string"
+          },
+          "server": {
+            "type": "string"
+          },
+          "device": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "description": "After the connection's address; it can never leave it."
+          },
+          "body": {}
+        }
+      },
+      "PlaybookDefinition": {
+        "type": "object",
+        "required": [
+          "name",
+          "trigger",
+          "steps"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "trigger": {
+            "$ref": "#/components/schemas/Trigger"
+          },
+          "conditions": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "$ref": "#/components/schemas/Condition"
+            },
+            "description": "All must hold on the event; none means every event."
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 30,
+            "items": {
+              "$ref": "#/components/schemas/Step"
+            }
+          }
+        }
+      },
+      "Playbook": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "enabled",
+          "trigger",
+          "conditions",
+          "steps",
+          "nextAt",
+          "lastRun",
+          "runs30Days",
+          "createdAt",
+          "updatedAt",
+          "updatedBy"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "trigger": {
+            "$ref": "#/components/schemas/Trigger"
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Condition"
+            }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Step"
+            }
+          },
+          "nextAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastRun": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "required": [
+              "id",
+              "state",
+              "startedAt"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "running",
+                  "waiting",
+                  "succeeded",
+                  "failed",
+                  "refused"
+                ]
+              },
+              "startedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "runs30Days": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          }
+        }
+      },
+      "PlaybookList": {
+        "type": "object",
+        "required": [
+          "playbooks"
+        ],
+        "properties": {
+          "playbooks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Playbook"
+            }
+          }
+        }
+      },
+      "SavedPlaybook": {
+        "type": "object",
+        "required": [
+          "playbook"
+        ],
+        "properties": {
+          "playbook": {
+            "$ref": "#/components/schemas/Playbook"
+          },
+          "webhookToken": {
+            "type": "string",
+            "description": "Shown once, when a webhook trigger gets a token."
+          }
+        }
+      },
+      "WebhookToken": {
+        "type": "object",
+        "required": [
+          "webhookToken"
+        ],
+        "properties": {
+          "webhookToken": {
+            "type": "string"
+          }
+        }
+      },
+      "RunNow": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "object",
+            "description": "The event to run on, as a trigger would send it."
+          },
+          "dry": {
+            "type": "boolean",
+            "description": "Send nothing; show what would be sent."
+          }
+        }
+      },
+      "Run": {
+        "type": "object",
+        "required": [
+          "id",
+          "playbook",
+          "cause",
+          "dry",
+          "state",
+          "startedAt",
+          "endedAt",
+          "startedBy",
+          "steps",
+          "waiting"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "playbook": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "cause": {
+            "type": "string",
+            "enum": [
+              "webhook",
+              "schedule",
+              "manual"
+            ]
+          },
+          "dry": {
+            "type": "boolean"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "running",
+              "waiting",
+              "succeeded",
+              "failed",
+              "refused"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "startedBy": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "integer",
+            "description": "Steps recorded so far."
+          },
+          "waiting": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "required": [
+              "stepId",
+              "text"
+            ],
+            "properties": {
+              "stepId": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "RunList": {
+        "type": "object",
+        "required": [
+          "runs"
+        ],
+        "properties": {
+          "runs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Run"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "description": "Pass it as cursor for the next page."
+          }
+        }
+      },
+      "RunStep": {
+        "type": "object",
+        "required": [
+          "position",
+          "stepId",
+          "kind",
+          "state",
+          "request",
+          "response",
+          "output",
+          "error",
+          "startedAt",
+          "ms",
+          "decidedBy",
+          "comment"
+        ],
+        "properties": {
+          "position": {
+            "type": "integer"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "failed",
+              "skipped",
+              "planned",
+              "waiting",
+              "approved",
+              "refused"
+            ]
+          },
+          "request": {
+            "description": "What was sent, without the token; for an approval, the question."
+          },
+          "response": {
+            "description": "The status and the answer, at most 16,000 characters."
+          },
+          "output": {
+            "description": "What later steps read as {{steps.<id>.…}}."
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ms": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "decidedBy": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "comment": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "RunDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Run"
+          },
+          {
+            "type": "object",
+            "required": [
+              "event",
+              "stepsDone",
+              "definition"
+            ],
+            "properties": {
+              "event": {},
+              "stepsDone": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RunStep"
+                }
+              },
+              "definition": {
+                "type": "object",
+                "required": [
+                  "steps"
+                ],
+                "properties": {
+                  "steps": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Step"
+                    }
+                  }
+                },
+                "description": "The steps as they were when the run started."
+              }
+            }
+          }
+        ]
+      },
+      "Decision": {
+        "type": "object",
+        "required": [
+          "approve"
+        ],
+        "properties": {
+          "approve": {
+            "type": "boolean"
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        }
+      },
+      "ApprovalList": {
+        "type": "object",
+        "required": [
+          "runs"
+        ],
+        "properties": {
+          "runs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Run"
+            }
+          }
+        }
+      },
+      "HookResult": {
+        "type": "object",
+        "required": [
+          "matched"
+        ],
+        "properties": {
+          "matched": {
+            "type": "boolean"
+          },
+          "run": {
+            "$ref": "#/components/schemas/Run"
+          }
+        }
+      },
+      "Summary": {
+        "type": "object",
+        "required": [
+          "playbooks",
+          "connections",
+          "runs",
+          "latest"
+        ],
+        "properties": {
+          "playbooks": {
+            "type": "object",
+            "required": [
+              "total",
+              "enabled"
+            ],
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "enabled": {
+                "type": "integer"
+              }
+            }
+          },
+          "connections": {
+            "type": "integer"
+          },
+          "runs": {
+            "type": "object",
+            "required": [
+              "last30Days",
+              "succeeded",
+              "failed",
+              "refused",
+              "waiting",
+              "perDay"
+            ],
+            "properties": {
+              "last30Days": {
+                "type": "integer",
+                "description": "Runs of the last 30 days, dry runs left out."
+              },
+              "succeeded": {
+                "type": "integer"
+              },
+              "failed": {
+                "type": "integer"
+              },
+              "refused": {
+                "type": "integer"
+              },
+              "waiting": {
+                "type": "integer"
+              },
+              "perDay": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "day",
+                    "runs",
+                    "failed"
+                  ],
+                  "properties": {
+                    "day": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "runs": {
+                      "type": "integer"
+                    },
+                    "failed": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "latest": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Run"
+            }
+          }
+        }
+      }
+    }
+  }
+}

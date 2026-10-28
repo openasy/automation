@@ -1,0 +1,213 @@
+{
+  "product": {
+    "overview": "Genel bakış",
+    "playbooks": "Oyun kitapları",
+    "runs": "Çalıştırmalar",
+    "approvals": "Onaylar",
+    "connections": "Bağlantılar",
+    "members": "Üyeler",
+    "signIn": "Oturum açma",
+    "apiTokens": "API belirteçleri",
+    "account": "Hesap",
+    "loading": "Yükleniyor",
+    "reading": "Oyun kitapları ve çalıştırmaları okunuyor."
+  },
+  "runStates": {
+    "running": "Çalışıyor",
+    "waiting": "Onay bekliyor",
+    "succeeded": "Tamamlandı",
+    "failed": "Başarısız",
+    "refused": "Reddedildi"
+  },
+  "stepStates": {
+    "ok": "Tamamlandı",
+    "failed": "Başarısız",
+    "skipped": "Atlandı",
+    "planned": "Çalışırdı",
+    "waiting": "Bekliyor",
+    "approved": "Onaylandı",
+    "refused": "Reddedildi"
+  },
+  "causes": {
+    "webhook": "Bir webhook'tan",
+    "schedule": "Zamanlamayla",
+    "manual": "{{who}} tarafından"
+  },
+  "triggers": {
+    "webhook": "Webhook",
+    "schedule": "Zamanlama",
+    "manual": "Elle",
+    "every": "Her {{n}} dakikada"
+  },
+  "stepKinds": {
+    "incident.open": "Olay aç",
+    "incident.note": "Olaya not ekle",
+    "vpn.suspend": "VPN kişisini askıya al",
+    "vpn.disconnect": "VPN oturumunu sonlandır",
+    "vpn.revoke-device": "VPN cihazını iptal et",
+    "message": "Mesaj gönder",
+    "http": "Bir API çağır",
+    "approval": "Onay iste"
+  },
+  "kinds": {
+    "openasy": "OpenAsy ürünü",
+    "slack": "Slack",
+    "teams": "Microsoft Teams",
+    "webhook": "Webhook"
+  },
+  "search": {
+    "playbook": "Oyun kitabı"
+  },
+  "runs": {
+    "dry": "Deneme",
+    "when": "Başlangıç",
+    "playbook": "Oyun kitabı",
+    "cause": "Başlatan",
+    "state": "Durum"
+  },
+  "overviewPage": {
+    "overview": "Genel bakış",
+    "description": "Bir ürün bir şey gördüğünde, bir oyun kitabı diğerleri üzerinden harekete geçer. Önemli bir şeyi değiştiren adımlar bir kişiyi bekler.",
+    "waiting_one": "{{count}} çalıştırma onay bekliyor",
+    "waiting_other": "{{count}} çalıştırma onay bekliyor",
+    "look": "İncele",
+    "waitingDetail": "Biri onaylayınca devam eder, reddedilirse durur.",
+    "noConnections": "Henüz bağlantı yok",
+    "noConnectionsDetail": "Adımlar yalnızca bir yöneticinin Bağlantılar altında eklediği ürünleri ve webhook'ları çağırır.",
+    "playbooks": "Açık oyun kitapları",
+    "ofTotal": "{{total}} içinde",
+    "runs30": "Çalıştırmalar, 30 gün",
+    "failed": "Başarısız",
+    "waitingKpi": "Bekleyen",
+    "connections": "Bağlantılar",
+    "last30Days": "Son 30 gün",
+    "last30DaysDetail": "Günün her çalıştırması tamamlandıysa yeşil, bazıları başarısızsa sarı, hepsi başarısızsa kırmızı.",
+    "daysAgo": "{{n}} gün önce",
+    "today": "Bugün",
+    "dayDetail": "{{runs}} çalıştırma, {{failed}} başarısız",
+    "latest": "Son çalıştırmalar"
+  },
+  "playbooksPage": {
+    "playbooks": "Oyun kitapları",
+    "description": "Her oyun kitabını neyin başlattığı ve attığı adımlar.",
+    "newPlaybook": "Yeni oyun kitabı",
+    "playbook": "Oyun kitabı",
+    "trigger": "Başlatan",
+    "steps": "Adım",
+    "runs30": "Çalıştırma, 30 g",
+    "lastRun": "Son çalıştırma",
+    "never": "Hiç",
+    "state": "Durum",
+    "on": "Açık",
+    "off": "Kapalı",
+    "none": "Oyun kitabı yok",
+    "noneDetail": "Yeni oyun kitabı ile oluştur."
+  },
+  "playbookPage": {
+    "notFound": "Oyun kitabı bulunamadı",
+    "notFoundDetail": "Silinmiş olabilir.",
+    "back": "Oyun kitaplarına dön",
+    "updated": "{{who}}, {{when}} tarihinde değiştirdi.",
+    "newDescription": "Oyun kitabını JSON olarak yaz: tetikleyicisi, olaydaki koşullar ve adımları.",
+    "runs": "Çalıştırmalar",
+    "delete": "Sil",
+    "deleteForGood": "Çalıştırmalarıyla birlikte sil",
+    "tokenOnce": "Webhook belirteci, bir kez gösterilir",
+    "token": "Webhook belirteci",
+    "steps": "Adımlar",
+    "stepsDetail": "Sırayla. Bir adım, kendinden önceki adımların yanıtlarını okur.",
+    "through": "{{name}} üzerinden",
+    "goesOn": "Başarısız olursa devam eder",
+    "startsWhen": "Başlangıç",
+    "everyEvent": "Her olayda.",
+    "hook": "Bir olay nasıl gönderilir",
+    "newToken": "Yeni belirteç",
+    "next": "Sonraki çalıştırma {{when}}.",
+    "tryIt": "Dene",
+    "tryItDetail": "Tetikleyicinin göndereceği gibi bir olay. Deneme çalıştırması hiçbir şey göndermez ve her adımın ne göndereceğini gösterir.",
+    "event": "Olay",
+    "dryRun": "Deneme çalıştırması",
+    "runNow": "Şimdi çalıştır",
+    "definition": "Tanım",
+    "definitionDetail": "trigger, conditions ve steps JSON olarak; API başvurusu her adımı açıklar. Başlamış çalıştırmalar başladıkları adımları korur.",
+    "notJson": "Bu geçerli bir JSON değil.",
+    "save": "Kaydet"
+  },
+  "runsPage": {
+    "runs": "Çalıştırmalar",
+    "description": "Her çalıştırma; her adımın ne gönderdiği ve ne yanıt aldığıyla.",
+    "all": "Tümü",
+    "none": "Çalıştırma yok",
+    "noneDetail": "Bir tetikleyici ateşlendiğinde ya da biri bir oyun kitabını çalıştırdığında bir çalıştırma başlar.",
+    "more": "Daha fazla göster"
+  },
+  "decide": {
+    "comment": "Yorum",
+    "approve": "Onayla",
+    "refuse": "Reddet"
+  },
+  "runPage": {
+    "notFound": "Çalıştırma bulunamadı",
+    "notFoundDetail": "Saklama süresinden sonra silinmiş olabilir.",
+    "back": "Çalıştırmalara dön",
+    "playbook": "Oyun kitabı",
+    "waitsForEditor": "Bir editör onaylayabilir ya da reddedebilir.",
+    "steps": "Adımlar",
+    "stepsDetail": "Her adımın belirteç olmadan ne gönderdiği ve ne yanıt aldığı.",
+    "dryDetail": "Deneme çalıştırması: hiçbir şey gönderilmedi. Önceki adımlardan gelen değerler boştur.",
+    "decidedBy": "{{who}} {{comment}}",
+    "request": "İstek",
+    "response": "Yanıt",
+    "event": "Olay"
+  },
+  "approvalsPage": {
+    "approvals": "Onaylar",
+    "description": "Önemli bir şeyi değiştiren bir adımdan önce bir kişiyi bekleyen çalıştırmalar.",
+    "none": "Onaylanacak bir şey yok",
+    "noneDetail": "Bir onay adımına gelen çalıştırmalar burada bekler.",
+    "from": "{{playbook}}, {{when}} tarihinde başladı",
+    "seeRun": "Çalıştırmayı gör"
+  },
+  "connectionsPage": {
+    "connections": "Bağlantılar",
+    "description": "Adımların çağırdığı tek adresler: API belirteciyle OpenAsy ürünleri ve Slack, Teams ya da başka webhook'lar. Belirteçler ve webhook anahtarları mühürlü tutulur ve bir daha gösterilmez.",
+    "connection": "Bağlantı",
+    "kind": "Tür",
+    "used": "Oyun kitabı",
+    "test": "Dene",
+    "delete": "{{name}} bağlantısını sil",
+    "none": "Bağlantı yok",
+    "noneDetail": "Bir yönetici aşağıdan ekler.",
+    "add": "Bağlantı ekle",
+    "addDetail": "Bir ürün için, o üründe adımların gerektirdiği rolle oluşturulmuş bir API belirteci: olay açmak için editör, kişileri askıya almak için yönetici.",
+    "name": "Ad",
+    "address": "Adres",
+    "webhookUrl": "Webhook URL'si",
+    "product": "Ürün",
+    "productHint": "Örneğin incidents ya da vpn.",
+    "token": "API belirteci",
+    "tokenHint": "Mühürlü tutulur; bir daha gösterilmez.",
+    "addButton": "Bağlantı ekle"
+  },
+  "settingsPage": {
+    "adminsOnly": "Yalnızca yöneticiler",
+    "askAnAdmin": "Bu automation'ın bir yöneticisine sor.",
+    "signOut": "Oturumu kapat",
+    "account": {
+      "title": "Hesap",
+      "description": "Profilin, parolan, iki adımlı doğrulama ve oturumunun açık olduğu yerler."
+    },
+    "members": {
+      "title": "Üyeler",
+      "description": "Bu automation'a kimin hangi rolle girebileceği. İzleyiciler her şeyi görür; editörler ayrıca oyun kitabı yazar, çalıştırır ve adımları onaylar; yöneticiler ayrıca bağlantı ekler, oyun kitabı siler, üyeleri ve belirteçleri yönetir."
+    },
+    "signin": {
+      "title": "Oturum açma",
+      "description": "OpenAsy Identity, Keycloak ya da Microsoft Entra ID gibi, kişilerin oturum açabileceği kimlik sağlayıcıları ve hangi gruplarının hangi rolü verdiği."
+    },
+    "tokens": {
+      "title": "API belirteçleri",
+      "description": "Betikler ve CI için. Her belirtecin bir rolü ve bir bitiş tarihi vardır; gizli değer bir kez gösterilir."
+    }
+  }
+}

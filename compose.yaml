@@ -1,0 +1,36 @@
+# Automation. Playbooks that act through the products when one of them sees something, with approvals before risky
+# steps (ADR 0060).
+#
+#   openssl rand -hex 32 > openasy-kek   # automation's key: sign-in secrets and connection tokens (ADR 0021). Keep it with your backups
+#   docker compose up -d
+#   docker compose logs automation | grep 'no owner yet'   # the one-time link that creates the owner account
+services:
+  automation:
+    image: ghcr.io/openasy/automation:0.1.0
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: [/tmp]
+    ports:
+      - "127.0.0.1:8080:8080" # UI, API and /hooks; put a TLS proxy in front to reach it from elsewhere
+    volumes:
+      - automation-data:/data # SQLite database: playbooks, connections and runs
+    secrets:
+      - openasy-kek # mounted at /run/secrets/openasy-kek
+    environment:
+      # The address people open Automation at; with a TLS proxy in front, its https:// URL.
+      AUTOMATION_PUBLIC_URL: ${AUTOMATION_PUBLIC_URL:-http://localhost:8080}
+      # The install's other products, for the product switcher.
+      OPENASY_PRODUCTS: ${OPENASY_PRODUCTS:-}
+      # Sign in with your identity provider (OIDC), see the README:
+      # OPENASY_OIDC_ISSUER: https://login.example.com
+      # OPENASY_OIDC_CLIENT_ID: automation
+      # OPENASY_OIDC_CLIENT_SECRET: ${OPENASY_OIDC_CLIENT_SECRET}
+
+volumes:
+  automation-data:
+
+secrets:
+  openasy-kek:
+    file: ./openasy-kek

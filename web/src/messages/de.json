@@ -1,0 +1,213 @@
+{
+  "product": {
+    "overview": "Übersicht",
+    "playbooks": "Playbooks",
+    "runs": "Läufe",
+    "approvals": "Freigaben",
+    "connections": "Verbindungen",
+    "members": "Mitglieder",
+    "signIn": "Anmeldung",
+    "apiTokens": "API-Token",
+    "account": "Konto",
+    "loading": "Wird geladen",
+    "reading": "Die Playbooks und ihre Läufe werden gelesen."
+  },
+  "runStates": {
+    "running": "Läuft",
+    "waiting": "Wartet auf Freigabe",
+    "succeeded": "Fertig",
+    "failed": "Fehlgeschlagen",
+    "refused": "Abgelehnt"
+  },
+  "stepStates": {
+    "ok": "Fertig",
+    "failed": "Fehlgeschlagen",
+    "skipped": "Übersprungen",
+    "planned": "Würde laufen",
+    "waiting": "Wartet",
+    "approved": "Freigegeben",
+    "refused": "Abgelehnt"
+  },
+  "causes": {
+    "webhook": "Von einem Webhook",
+    "schedule": "Nach Zeitplan",
+    "manual": "Von {{who}}"
+  },
+  "triggers": {
+    "webhook": "Webhook",
+    "schedule": "Zeitplan",
+    "manual": "Von Hand",
+    "every": "Alle {{n}} Minuten"
+  },
+  "stepKinds": {
+    "incident.open": "Vorfall eröffnen",
+    "incident.note": "Notiz am Vorfall",
+    "vpn.suspend": "VPN-Person sperren",
+    "vpn.disconnect": "VPN-Sitzung beenden",
+    "vpn.revoke-device": "VPN-Gerät widerrufen",
+    "message": "Nachricht senden",
+    "http": "Eine API aufrufen",
+    "approval": "Freigabe einholen"
+  },
+  "kinds": {
+    "openasy": "OpenAsy-Produkt",
+    "slack": "Slack",
+    "teams": "Microsoft Teams",
+    "webhook": "Webhook"
+  },
+  "search": {
+    "playbook": "Playbook"
+  },
+  "runs": {
+    "dry": "Probelauf",
+    "when": "Gestartet",
+    "playbook": "Playbook",
+    "cause": "Gestartet",
+    "state": "Zustand"
+  },
+  "overviewPage": {
+    "overview": "Übersicht",
+    "description": "Sieht ein Produkt etwas, handelt ein Playbook über die anderen. Schritte, die Wichtiges ändern, warten auf eine Person.",
+    "waiting_one": "{{count}} Lauf wartet auf Freigabe",
+    "waiting_other": "{{count}} Läufe warten auf Freigabe",
+    "look": "Ansehen",
+    "waitingDetail": "Sie laufen weiter, sobald jemand freigibt, und halten bei Ablehnung an.",
+    "noConnections": "Noch keine Verbindungen",
+    "noConnectionsDetail": "Schritte rufen nur Produkte und Webhooks auf, die ein Admin unter Verbindungen hinzufügt.",
+    "playbooks": "Aktive Playbooks",
+    "ofTotal": "von {{total}}",
+    "runs30": "Läufe, 30 Tage",
+    "failed": "Fehlgeschlagen",
+    "waitingKpi": "Wartend",
+    "connections": "Verbindungen",
+    "last30Days": "Letzte 30 Tage",
+    "last30DaysDetail": "Grün, wenn jeder Lauf des Tages fertig wurde, gelb, wenn einige fehlschlugen, rot, wenn alle.",
+    "daysAgo": "vor {{n}} Tagen",
+    "today": "Heute",
+    "dayDetail": "{{runs}} Läufe, {{failed}} fehlgeschlagen",
+    "latest": "Letzte Läufe"
+  },
+  "playbooksPage": {
+    "playbooks": "Playbooks",
+    "description": "Was jedes Playbook startet, und welche Schritte es geht.",
+    "newPlaybook": "Neues Playbook",
+    "playbook": "Playbook",
+    "trigger": "Startet bei",
+    "steps": "Schritte",
+    "runs30": "Läufe, 30 T",
+    "lastRun": "Letzter Lauf",
+    "never": "Nie",
+    "state": "Zustand",
+    "on": "An",
+    "off": "Aus",
+    "none": "Keine Playbooks",
+    "noneDetail": "Erstelle eines mit Neues Playbook."
+  },
+  "playbookPage": {
+    "notFound": "Playbook nicht gefunden",
+    "notFoundDetail": "Es wurde vielleicht gelöscht.",
+    "back": "Zurück zu den Playbooks",
+    "updated": "Von {{who}} am {{when}} geändert.",
+    "newDescription": "Schreibe das Playbook als JSON: seinen Auslöser, die Bedingungen an das Ereignis und seine Schritte.",
+    "runs": "Läufe",
+    "delete": "Löschen",
+    "deleteForGood": "Mit seinen Läufen löschen",
+    "tokenOnce": "Das Webhook-Token, einmal angezeigt",
+    "token": "Webhook-Token",
+    "steps": "Schritte",
+    "stepsDetail": "Der Reihe nach. Ein Schritt liest die Antworten der Schritte davor.",
+    "through": "über {{name}}",
+    "goesOn": "Läuft bei Fehler weiter",
+    "startsWhen": "Start",
+    "everyEvent": "Bei jedem Ereignis.",
+    "hook": "So wird ein Ereignis gesendet",
+    "newToken": "Neues Token",
+    "next": "Nächster Lauf {{when}}.",
+    "tryIt": "Ausprobieren",
+    "tryItDetail": "Ein Ereignis, wie der Auslöser es senden würde. Ein Probelauf sendet nichts und zeigt, was jeder Schritt senden würde.",
+    "event": "Ereignis",
+    "dryRun": "Probelauf",
+    "runNow": "Jetzt ausführen",
+    "definition": "Definition",
+    "definitionDetail": "trigger, conditions und steps als JSON; die API-Referenz beschreibt jeden Schritt. Bereits gestartete Läufe behalten ihre Schritte.",
+    "notJson": "Das ist kein gültiges JSON.",
+    "save": "Speichern"
+  },
+  "runsPage": {
+    "runs": "Läufe",
+    "description": "Jeder Lauf, mit dem, was jeder Schritt gesendet hat und was zurückkam.",
+    "all": "Alle",
+    "none": "Keine Läufe",
+    "noneDetail": "Ein Lauf startet, wenn ein Auslöser feuert oder jemand ein Playbook ausführt.",
+    "more": "Mehr anzeigen"
+  },
+  "decide": {
+    "comment": "Kommentar",
+    "approve": "Freigeben",
+    "refuse": "Ablehnen"
+  },
+  "runPage": {
+    "notFound": "Lauf nicht gefunden",
+    "notFoundDetail": "Er wurde vielleicht nach der Aufbewahrungsfrist gelöscht.",
+    "back": "Zurück zu den Läufen",
+    "playbook": "Playbook",
+    "waitsForEditor": "Ein Editor kann ihn freigeben oder ablehnen.",
+    "steps": "Schritte",
+    "stepsDetail": "Was jeder Schritt ohne Token gesendet hat, und was zurückkam.",
+    "dryDetail": "Ein Probelauf: Nichts wurde gesendet. Werte aus früheren Schritten sind leer.",
+    "decidedBy": "von {{who}} {{comment}}",
+    "request": "Anfrage",
+    "response": "Antwort",
+    "event": "Ereignis"
+  },
+  "approvalsPage": {
+    "approvals": "Freigaben",
+    "description": "Läufe, die vor einem Schritt, der Wichtiges ändert, auf eine Person warten.",
+    "none": "Nichts freizugeben",
+    "noneDetail": "Läufe, die einen Freigabeschritt erreichen, warten hier.",
+    "from": "{{playbook}}, gestartet {{when}}",
+    "seeRun": "Lauf ansehen"
+  },
+  "connectionsPage": {
+    "connections": "Verbindungen",
+    "description": "Die einzigen Adressen, die Schritte aufrufen: OpenAsy-Produkte mit einem API-Token, und Slack, Teams oder andere Webhooks. Token und Webhook-Schlüssel werden versiegelt aufbewahrt und nie wieder angezeigt.",
+    "connection": "Verbindung",
+    "kind": "Art",
+    "used": "Playbooks",
+    "test": "Testen",
+    "delete": "{{name}} löschen",
+    "none": "Keine Verbindungen",
+    "noneDetail": "Ein Admin fügt sie unten hinzu.",
+    "add": "Verbindung hinzufügen",
+    "addDetail": "Für ein Produkt ein API-Token, das in diesem Produkt mit der Rolle erstellt wurde, die seine Schritte brauchen: Editor, um Vorfälle zu eröffnen, Admin, um Personen zu sperren.",
+    "name": "Name",
+    "address": "Adresse",
+    "webhookUrl": "Webhook-URL",
+    "product": "Produkt",
+    "productHint": "Etwa incidents oder vpn.",
+    "token": "API-Token",
+    "tokenHint": "Versiegelt aufbewahrt; nicht wieder angezeigt.",
+    "addButton": "Verbindung hinzufügen"
+  },
+  "settingsPage": {
+    "adminsOnly": "Nur für Admins",
+    "askAnAdmin": "Frage einen Admin dieser automation.",
+    "signOut": "Abmelden",
+    "account": {
+      "title": "Konto",
+      "description": "Dein Profil, Passwort, die Zwei-Schritt-Verifizierung und wo du angemeldet bist."
+    },
+    "members": {
+      "title": "Mitglieder",
+      "description": "Wer sich bei dieser automation anmelden kann, und mit welcher Rolle. Viewer sehen alles; Editoren schreiben und starten außerdem Playbooks und geben Schritte frei; Admins fügen außerdem Verbindungen hinzu, löschen Playbooks und verwalten Mitglieder und Token."
+    },
+    "signin": {
+      "title": "Anmeldung",
+      "description": "Identitätsanbieter, mit denen sich Personen anmelden können, etwa OpenAsy Identity, Keycloak oder Microsoft Entra ID, und welche ihrer Gruppen welche Rolle geben."
+    },
+    "tokens": {
+      "title": "API-Token",
+      "description": "Für Skripte und CI. Jedes Token hat eine Rolle und ein Ablaufdatum; das Geheimnis wird einmal angezeigt."
+    }
+  }
+}

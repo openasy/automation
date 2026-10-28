@@ -1,0 +1,213 @@
+{
+  "product": {
+    "overview": "Overview",
+    "playbooks": "Playbooks",
+    "runs": "Runs",
+    "approvals": "Approvals",
+    "connections": "Connections",
+    "members": "Members",
+    "signIn": "Sign-in",
+    "apiTokens": "API tokens",
+    "account": "Account",
+    "loading": "Loading",
+    "reading": "Reading the playbooks and their runs."
+  },
+  "runStates": {
+    "running": "Running",
+    "waiting": "Waiting for approval",
+    "succeeded": "Done",
+    "failed": "Failed",
+    "refused": "Refused"
+  },
+  "stepStates": {
+    "ok": "Done",
+    "failed": "Failed",
+    "skipped": "Skipped",
+    "planned": "Would run",
+    "waiting": "Waiting",
+    "approved": "Approved",
+    "refused": "Refused"
+  },
+  "causes": {
+    "webhook": "From a webhook",
+    "schedule": "On schedule",
+    "manual": "By {{who}}"
+  },
+  "triggers": {
+    "webhook": "Webhook",
+    "schedule": "Schedule",
+    "manual": "By hand",
+    "every": "Every {{n}} minutes"
+  },
+  "stepKinds": {
+    "incident.open": "Open an incident",
+    "incident.note": "Note on an incident",
+    "vpn.suspend": "Suspend a VPN person",
+    "vpn.disconnect": "End a VPN session",
+    "vpn.revoke-device": "Revoke a VPN device",
+    "message": "Send a message",
+    "http": "Call an API",
+    "approval": "Ask for approval"
+  },
+  "kinds": {
+    "openasy": "OpenAsy product",
+    "slack": "Slack",
+    "teams": "Microsoft Teams",
+    "webhook": "Webhook"
+  },
+  "search": {
+    "playbook": "Playbook"
+  },
+  "runs": {
+    "dry": "Dry run",
+    "when": "Started",
+    "playbook": "Playbook",
+    "cause": "Started",
+    "state": "State"
+  },
+  "overviewPage": {
+    "overview": "Overview",
+    "description": "When one product sees something, a playbook acts through the others. Steps that change something important wait for a person.",
+    "waiting_one": "{{count}} run waits for approval",
+    "waiting_other": "{{count}} runs wait for approval",
+    "look": "Look",
+    "waitingDetail": "They go on once someone approves, and stop if refused.",
+    "noConnections": "No connections yet",
+    "noConnectionsDetail": "Steps call products and webhooks an admin adds under Connections, and nothing else.",
+    "playbooks": "Playbooks on",
+    "ofTotal": "of {{total}}",
+    "runs30": "Runs, 30 days",
+    "failed": "Failed",
+    "waitingKpi": "Waiting",
+    "connections": "Connections",
+    "last30Days": "Last 30 days",
+    "last30DaysDetail": "Green when every run of the day was done, amber when some failed, red when all did.",
+    "daysAgo": "{{n}} days ago",
+    "today": "Today",
+    "dayDetail": "{{runs}} runs, {{failed}} failed",
+    "latest": "Latest runs"
+  },
+  "playbooksPage": {
+    "playbooks": "Playbooks",
+    "description": "What starts each playbook, and the steps it takes.",
+    "newPlaybook": "New playbook",
+    "playbook": "Playbook",
+    "trigger": "Starts on",
+    "steps": "Steps",
+    "runs30": "Runs, 30 d",
+    "lastRun": "Last run",
+    "never": "Never",
+    "state": "State",
+    "on": "On",
+    "off": "Off",
+    "none": "No playbooks",
+    "noneDetail": "Make one with New playbook."
+  },
+  "playbookPage": {
+    "notFound": "Playbook not found",
+    "notFoundDetail": "It may have been deleted.",
+    "back": "Back to playbooks",
+    "updated": "Changed by {{who}} on {{when}}.",
+    "newDescription": "Write the playbook as JSON: its trigger, the conditions on the event, and its steps.",
+    "runs": "Runs",
+    "delete": "Delete",
+    "deleteForGood": "Delete with its runs",
+    "tokenOnce": "The webhook token, shown once",
+    "token": "Webhook token",
+    "steps": "Steps",
+    "stepsDetail": "In order. A step reads the answers of the steps before it.",
+    "through": "through {{name}}",
+    "goesOn": "Goes on if it fails",
+    "startsWhen": "Starts",
+    "everyEvent": "On every event.",
+    "hook": "How to send an event",
+    "newToken": "New token",
+    "next": "Next run {{when}}.",
+    "tryIt": "Try it",
+    "tryItDetail": "An event as the trigger would send it. A dry run sends nothing and shows what each step would send.",
+    "event": "Event",
+    "dryRun": "Dry run",
+    "runNow": "Run now",
+    "definition": "Definition",
+    "definitionDetail": "trigger, conditions and steps as JSON; the API reference describes each step. Runs already started keep the steps they started with.",
+    "notJson": "This is not valid JSON.",
+    "save": "Save"
+  },
+  "runsPage": {
+    "runs": "Runs",
+    "description": "Every run, with what each step sent and what came back.",
+    "all": "All",
+    "none": "No runs",
+    "noneDetail": "A run starts when a trigger fires, or when someone runs a playbook.",
+    "more": "Show more"
+  },
+  "decide": {
+    "comment": "Comment",
+    "approve": "Approve",
+    "refuse": "Refuse"
+  },
+  "runPage": {
+    "notFound": "Run not found",
+    "notFoundDetail": "It may have been deleted after the retention.",
+    "back": "Back to runs",
+    "playbook": "Playbook",
+    "waitsForEditor": "An editor can approve or refuse it.",
+    "steps": "Steps",
+    "stepsDetail": "What each step sent, without the token, and what came back.",
+    "dryDetail": "A dry run: nothing was sent. Values that come from earlier steps are empty.",
+    "decidedBy": "by {{who}} {{comment}}",
+    "request": "Request",
+    "response": "Response",
+    "event": "Event"
+  },
+  "approvalsPage": {
+    "approvals": "Approvals",
+    "description": "Runs waiting for a person before a step that changes something important.",
+    "none": "Nothing to approve",
+    "noneDetail": "Runs that reach an approval step wait here.",
+    "from": "{{playbook}}, started {{when}}",
+    "seeRun": "See the run"
+  },
+  "connectionsPage": {
+    "connections": "Connections",
+    "description": "The only addresses steps call: OpenAsy products with an API token, and Slack, Teams or other webhooks. Tokens and webhook keys are kept sealed and never shown again.",
+    "connection": "Connection",
+    "kind": "Kind",
+    "used": "Playbooks",
+    "test": "Test",
+    "delete": "Delete {{name}}",
+    "none": "No connections",
+    "noneDetail": "An admin adds them below.",
+    "add": "Add a connection",
+    "addDetail": "For a product, an API token made in that product with the role its steps need: editor to open incidents, admin to suspend people.",
+    "name": "Name",
+    "address": "Address",
+    "webhookUrl": "Webhook URL",
+    "product": "Product",
+    "productHint": "Such as incidents or vpn.",
+    "token": "API token",
+    "tokenHint": "Kept sealed; not shown again.",
+    "addButton": "Add connection"
+  },
+  "settingsPage": {
+    "adminsOnly": "Admins only",
+    "askAnAdmin": "Ask an admin of this automation.",
+    "signOut": "Sign out",
+    "account": {
+      "title": "Account",
+      "description": "Your profile, password, two-step verification and where you are signed in."
+    },
+    "members": {
+      "title": "Members",
+      "description": "Who can sign in to this automation, and with which role. Viewers see everything; editors also write and run playbooks and approve steps; admins also add connections, delete playbooks, and manage members and tokens."
+    },
+    "signin": {
+      "title": "Sign-in",
+      "description": "Identity providers people can sign in with, such as OpenAsy Identity, Keycloak or Microsoft Entra ID, and which of their groups give which role."
+    },
+    "tokens": {
+      "title": "API tokens",
+      "description": "For scripts and CI. Each token has one role and an expiry; the secret is shown once."
+    }
+  }
+}
