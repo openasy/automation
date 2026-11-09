@@ -1,6 +1,6 @@
 {
   "name": "@openasy/automation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "OpenAsy Automation: playbooks that act through the products when one of them sees something, with approvals before risky steps.",
   "license": "AGPL-3.0-only",

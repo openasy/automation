@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "OpenAsy Automation API",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "summary": "Playbooks that act through the products when one of them sees something, with approvals before risky steps.",
     "description": "Every screen of automation uses this API, and so can your scripts (ADR 0014). Within `/api/v1` changes are additive only; anything removed is deprecated first (ADR 0024). Errors use Problem Details (RFC 9457).\n\nEvents start playbooks at `/hooks/<playbook>`, with the playbook's own token. Everything else takes the session of a signed-in person or an API token, and each operation names the role it needs (`x-openasy-role`: viewer, editor, admin; ADR 0003).\n\nSign-in, members and API tokens are under `/api/v1/auth`, provided by [@openasy/auth](https://github.com/openasy/auth#routes).",
     "license": {
